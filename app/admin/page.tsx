@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, calculateDiscountPercent } from "@/lib/format";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { getAllProducts } from "@/lib/products-data";
 import { deleteProduct } from "./actions";
@@ -31,6 +31,7 @@ export default async function AdminDashboardPage() {
               <th className="px-4 py-3">Name</th>
               <th className="px-4 py-3">Category</th>
               <th className="px-4 py-3">Price</th>
+              <th className="px-4 py-3">Discount</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
@@ -65,6 +66,11 @@ export default async function AdminDashboardPage() {
                   ) : (
                     formatPrice(product.price)
                   )}
+                </td>
+                <td className="px-4 py-2">
+                  {product.salePrice
+                    ? `${calculateDiscountPercent(product.price, product.salePrice)}% off`
+                    : "—"}
                 </td>
                 <td className="px-4 py-2">
                   <div className="flex justify-end gap-2">

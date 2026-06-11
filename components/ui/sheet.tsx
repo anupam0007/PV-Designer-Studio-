@@ -2,7 +2,6 @@
 
 import * as React from "react"
 import { Dialog as SheetPrimitive } from "@base-ui/react/dialog"
-import { Slot } from "@radix-ui/react-slot"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -14,17 +13,23 @@ function Sheet({ ...props }: SheetPrimitive.Root.Props) {
 
 function SheetTrigger({
   asChild,
+  children,
   ...props
 }: SheetPrimitive.Trigger.Props & { asChild?: boolean }) {
   if (asChild) {
     return (
-      <Slot
+      <SheetPrimitive.Trigger
         data-slot="sheet-trigger"
-        {...(props as React.ComponentPropsWithoutRef<"button">)}
+        render={children as React.ReactElement}
+        {...props}
       />
     )
   }
-  return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />
+  return (
+    <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props}>
+      {children}
+    </SheetPrimitive.Trigger>
+  )
 }
 
 function SheetClose({ ...props }: SheetPrimitive.Close.Props) {

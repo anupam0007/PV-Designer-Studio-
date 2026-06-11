@@ -7,7 +7,7 @@ import type { Product } from "@/data/products";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useWishlist } from "@/lib/wishlist-context";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, calculateDiscountPercent } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 export function ProductCard({ product }: { product: Product }) {
@@ -34,7 +34,11 @@ export function ProductCard({ product }: { product: Product }) {
           {product.isBestseller && (
             <Badge className="bg-accent text-accent-foreground">Bestseller</Badge>
           )}
-          {onSale && <Badge variant="destructive">Sale</Badge>}
+          {onSale && (
+            <Badge variant="destructive">
+              {calculateDiscountPercent(product.price, product.salePrice!)}% OFF
+            </Badge>
+          )}
         </div>
       </Link>
 

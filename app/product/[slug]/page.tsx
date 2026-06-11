@@ -5,7 +5,7 @@ import { ProductGallery } from "@/components/product-gallery";
 import { ProductPurchaseForm } from "@/components/product-purchase-form";
 import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, calculateDiscountPercent } from "@/lib/format";
 import {
   getAllProducts,
   getProductBySlugAsync,
@@ -58,7 +58,11 @@ export default async function ProductPage({
             {product.isBestseller && (
               <Badge className="bg-accent text-accent-foreground">Bestseller</Badge>
             )}
-            {onSale && <Badge variant="destructive">Sale</Badge>}
+            {onSale && (
+              <Badge variant="destructive">
+                {calculateDiscountPercent(product.price, product.salePrice!)}% OFF
+              </Badge>
+            )}
           </div>
           <h1 className="text-3xl font-semibold sm:text-4xl">{product.name}</h1>
           <p className="mt-1 text-sm uppercase tracking-wide text-muted-foreground">
@@ -73,6 +77,9 @@ export default async function ProductPage({
                 </span>
                 <span className="text-lg text-muted-foreground line-through">
                   {formatPrice(product.price)}
+                </span>
+                <span className="text-sm font-semibold text-destructive">
+                  {calculateDiscountPercent(product.price, product.salePrice!)}% off
                 </span>
               </>
             ) : (

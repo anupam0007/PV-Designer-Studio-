@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import type { Product } from "@/data/products";
 import type { ActionState } from "@/app/admin/actions";
+import { calculateDiscountPercent } from "@/lib/format";
 
 const categories = ["blouses", "gowns", "lehengas", "indo-western", "men", "kids"];
 const brands = ["PV Bridals", "Nayakii", "PV Rentals"];
@@ -26,6 +27,13 @@ export function ProductForm({
   action: (prevState: ActionState, formData: FormData) => Promise<ActionState>;
 }) {
   const [state, formAction, pending] = useActionState(action, {});
+  const [price, setPrice] = useState(product?.price ?? 0);
+  const [salePrice, setSalePrice] = useState(product?.salePrice ?? 0);
+
+  const discountPercent =
+    price > 0 && salePrice > 0 && salePrice < price
+      ? calculateDiscountPercent(price, salePrice)
+      : null;
 
   return (
     <form action={formAction} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -72,11 +80,27 @@ export function ProductForm({
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="price">Price (INR)</Label>
-        <Input id="price" name="price" type="number" required defaultValue={product?.price} />
+        <Input
+          id="price"
+          name="price"
+          type="number"
+          required
+          defaultValue={product?.price}
+          onChange={(e) => setPrice(Number(e.target.value))}
+        />
       </div>
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="salePrice">Sale Price (INR, optional)</Label>
-        <Input id="salePrice" name="salePrice" type="number" defaultValue={product?.salePrice} />
+        <Input
+          id="salePrice"
+          name="salePrice"
+          type="number"
+          defaultValue={product?.salePrice}
+          onChange={(e) => setSalePrice(Number(e.target.value))}
+        />
+        {discountPercent !== null && (
+          <p className="text-sm font-medium text-destructive">{discountPercent}% off</p>
+        )}
       </div>
 
       <div className="flex flex-col gap-1.5">

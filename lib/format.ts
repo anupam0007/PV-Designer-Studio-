@@ -6,3 +6,8 @@ export function formatPrice(amount: number): string {
     maximumFractionDigits: 0,
   }).format(amount);
 }
+
+/** Discount percentage off the original price, rounded to the nearest whole number. */
+export function calculateDiscountPercent(price: number, salePrice: number): number {
+  return Math.round(((price - salePrice) / price) * 100);
+}
