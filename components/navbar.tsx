@@ -19,7 +19,6 @@ const navLinks = [
   { label: "Flash Sale", href: "/flash-sale" },
   { label: "Designer", href: "/designer" },
   { label: "Size Chart", href: "/size-chart" },
-  { label: "Reviews", href: "/reviews" },
 ];
 
 export function Navbar() {
