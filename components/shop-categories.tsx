@@ -42,8 +42,6 @@ export function ShopCategories() {
   const router = useRouter();
 
   function goTo(href: string) {
-    // Scroll to top instantly, then navigate
-    window.scrollTo({ top: 0, behavior: "instant" });
     router.push(href);
   }
 
