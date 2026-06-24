@@ -38,3 +38,43 @@ export function buildProductEnquiryLink(productName: string, phone?: string) {
     phone
   );
 }
+
+/** Flash Sale: message includes name, selected size, price, and image URL. */
+export function buildFlashSaleWhatsAppLink(
+  productName: string,
+  size: string,
+  price: string,
+  imageUrl: string,
+  phone?: string
+) {
+  const message = [
+    "Hello PV Designer Studio! I'd like to order:",
+    "",
+    `*${productName}*`,
+    `Size: ${size}`,
+    `Price: ${price}`,
+    `Image: ${imageUrl}`,
+    "",
+    "Please confirm availability.",
+  ].join("\n");
+  return buildWhatsAppLink(message, phone);
+}
+
+/** Designer enquiry: message includes name, selected size, and image URL (no price). */
+export function buildDesignerWhatsAppLink(
+  productName: string,
+  size: string,
+  imageUrl: string,
+  phone?: string
+) {
+  const message = [
+    "Hello PV Designer Studio! I'm interested in:",
+    "",
+    `*${productName}*`,
+    `Size: ${size}`,
+    `Image: ${imageUrl}`,
+    "",
+    "Please share more details and pricing.",
+  ].join("\n");
+  return buildWhatsAppLink(message, phone);
+}

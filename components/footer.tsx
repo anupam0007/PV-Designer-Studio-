@@ -1,131 +1,119 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, MessageCircle } from "lucide-react";
-import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons";
-import { getContactSettings, buildContactWhatsAppLink } from "@/lib/site-settings-data";
-
-const collections = [
-  { label: "Gowns", href: "/shop/gowns" },
-  { label: "Lehengas", href: "/shop/lehengas" },
-  { label: "Bridal Blouse", href: "/shop/blouses" },
-  { label: "Indo-Western", href: "/shop/indo-western" },
-  { label: "Men's", href: "/shop/men" },
-];
-
-const quickLinks = [
-  { label: "About", href: "/about" },
-  { label: "Reviews", href: "/reviews" },
-  { label: "Size Chart", href: "/size-chart" },
-  { label: "Contact", href: "/contact" },
-];
+import { Mail, MessageCircle, MapPin, Phone } from "lucide-react";
+import { FacebookIcon, InstagramIcon } from "@/components/social-icons";
+import { getContactSettings } from "@/lib/site-settings-data";
+import { locations } from "@/data/locations";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 export async function Footer() {
   const contact = await getContactSettings();
-  const whatsappLink = buildContactWhatsAppLink(contact);
+  const whatsappLink = buildWhatsAppLink(
+    "Hello PV Designer Studio, I'm interested in your collections!",
+    contact.whatsappNumber
+  );
 
   return (
     <footer className="border-t border-border bg-secondary/40">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-12 sm:px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-        {/* Brand */}
-        <div className="space-y-4">
-          <Image
-            src="/images/logo.png"
-            alt="PV Designer Studio"
-            width={170}
-            height={44}
-            className="h-11 w-auto"
-          />
-          <p className="text-sm leading-relaxed text-muted-foreground">
-            Bespoke, handcrafted bridal lehengas, designer gowns and bridal
-            blouses — customized to you, with worldwide delivery and virtual
-            consultations. <span className="italic">Customize Your Charm.</span>
-          </p>
-          <div className="flex gap-3">
-            <SocialIcon href={contact.instagram} label="Instagram">
-              <InstagramIcon className="h-4 w-4" />
-            </SocialIcon>
-            <SocialIcon href={contact.facebook} label="Facebook">
-              <FacebookIcon className="h-4 w-4" />
-            </SocialIcon>
-            <SocialIcon href={contact.youtube} label="YouTube">
-              <YoutubeIcon className="h-4 w-4" />
-            </SocialIcon>
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-4">
+          {/* Brand + About */}
+          <div className="space-y-4">
+            <Image
+              src="/images/logo.png"
+              alt="PV Designer Studio"
+              width={170}
+              height={44}
+              className="h-11 w-auto"
+            />
+            <p className="text-sm leading-relaxed text-muted-foreground">
+              Bespoke, handcrafted bridal lehengas, designer gowns and bridal blouses —
+              customized to you, with worldwide delivery and virtual consultations.{" "}
+              <span className="italic">Customize Your Charm.</span>
+            </p>
+            <div className="flex gap-3">
+              <SocialIcon href={contact.instagram} label="Instagram">
+                <InstagramIcon className="h-4 w-4" />
+              </SocialIcon>
+              <SocialIcon href={contact.facebook} label="Facebook">
+                <FacebookIcon className="h-4 w-4" />
+              </SocialIcon>
+            </div>
           </div>
-        </div>
 
-        {/* Collections */}
-        <div>
-          <h3 className="mb-4 font-heading text-lg font-semibold text-primary">
-            Our Collections
-          </h3>
-          <ul className="space-y-2 text-sm">
-            {collections.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className="text-muted-foreground transition-colors hover:text-primary">
-                  {link.label}
+          {/* Studio Locations */}
+          <div className="lg:col-span-2">
+            <h3 className="mb-4 font-heading text-base font-semibold uppercase tracking-wide text-primary">
+              Our Studios
+            </h3>
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+              {locations.map((loc) => (
+                <div key={loc.id} className="text-sm">
+                  <div className="flex items-start gap-2">
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <div>
+                      <p className="font-semibold text-foreground">
+                        {loc.name.split("—")[1]?.trim() ?? loc.name}
+                      </p>
+                      <p className="mt-0.5 text-muted-foreground">{loc.address}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="mb-4 font-heading text-base font-semibold uppercase tracking-wide text-primary">
+              Contact Us
+            </h3>
+            <ul className="space-y-3 text-sm">
+              {contact.phones.map((p) => (
+                <li key={p.number} className="flex items-start gap-2">
+                  <Phone className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium text-foreground">{p.label}</p>
+                    <a
+                      href={`tel:${p.number.replace(/\s+/g, "")}`}
+                      className="text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      {p.number}
+                    </a>
+                  </div>
+                </li>
+              ))}
+              <li>
+                <a
+                  href={`mailto:${contact.email}`}
+                  className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
+                >
+                  <Mail className="h-4 w-4 shrink-0" />
+                  {contact.email}
+                </a>
+              </li>
+              <li>
+                <Link
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
+                >
+                  <MessageCircle className="h-4 w-4 shrink-0" />
+                  WhatsApp Us
                 </Link>
               </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Quick links */}
-        <div>
-          <h3 className="mb-4 font-heading text-lg font-semibold text-primary">
-            Quick Links
-          </h3>
-          <ul className="space-y-2 text-sm">
-            {quickLinks.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className="text-muted-foreground transition-colors hover:text-primary">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Quick help */}
-        <div>
-          <h3 className="mb-4 font-heading text-lg font-semibold text-primary">
-            Quick Help
-          </h3>
-          <ul className="space-y-3 text-sm">
-            <li>
-              <Link
-                href={whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-              >
-                <MessageCircle className="h-4 w-4" /> WhatsApp Us
-              </Link>
-            </li>
-            <li>
-              <a
-                href={`mailto:${contact.email}`}
-                className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-              >
-                <Mail className="h-4 w-4" /> {contact.email}
-              </a>
-            </li>
-            <li>
-              <Link
-                href={contact.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
-              >
-                <InstagramIcon className="h-4 w-4" /> Chat on Instagram
-              </Link>
-            </li>
-          </ul>
+            </ul>
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-1 border-t border-border py-5 text-center text-sm text-muted-foreground sm:flex-row sm:justify-center sm:gap-3">
+      <div className="flex flex-col items-center justify-center gap-2 border-t border-border py-5 text-center text-sm text-muted-foreground sm:flex-row sm:gap-4">
         <span>© {new Date().getFullYear()} PV Designer Studio. All rights reserved.</span>
-        <Link href="/admin/login" className="text-xs text-muted-foreground/60 transition-colors hover:text-primary">
+        <Link
+          href="/admin/login"
+          className="text-xs text-muted-foreground/50 transition-colors hover:text-primary"
+        >
           Admin
         </Link>
       </div>

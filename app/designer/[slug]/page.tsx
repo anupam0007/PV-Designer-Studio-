@@ -2,12 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { ProductGallery } from "@/components/product-gallery";
-import { FlashSalePurchaseForm } from "@/components/flash-sale-purchase-form";
-import { formatPrice, calculateDiscountPercent } from "@/lib/format";
-import {
-  getAllProducts,
-  getProductBySlugAsync,
-} from "@/lib/products-data";
+import { DesignerPurchaseForm } from "@/components/designer-purchase-form";
+import { getAllProducts, getProductBySlugAsync } from "@/lib/products-data";
 
 export async function generateStaticParams() {
   const products = await getAllProducts();
@@ -29,7 +25,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductPage({
+export default async function DesignerProductPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -39,27 +35,19 @@ export default async function ProductPage({
 
   if (!product) notFound();
 
-  const onSale = product.salePrice !== undefined;
-  const discountPct = onSale
-    ? calculateDiscountPercent(product.price, product.salePrice!)
-    : null;
-
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
         <ProductGallery images={product.images} name={product.name} />
 
         <div>
-          {/* Badges */}
+          {/* Badges (no sale badge — no prices shown on Designer) */}
           <div className="mb-2 flex flex-wrap gap-2">
             {product.isNew && (
               <Badge className="bg-primary text-primary-foreground">New</Badge>
             )}
             {product.isBestseller && (
               <Badge className="bg-accent text-accent-foreground">Bestseller</Badge>
-            )}
-            {discountPct !== null && (
-              <Badge variant="destructive">-{discountPct}% OFF</Badge>
             )}
           </div>
 
@@ -68,33 +56,12 @@ export default async function ProductPage({
             {product.brand}
           </p>
 
-          {/* Price */}
-          <div className="mt-4 flex items-baseline gap-3">
-            {onSale ? (
-              <>
-                <span className="text-2xl font-semibold text-primary">
-                  {formatPrice(product.salePrice!)}
-                </span>
-                <span className="text-lg text-muted-foreground line-through">
-                  {formatPrice(product.price)}
-                </span>
-                <span className="text-sm font-semibold text-destructive">
-                  {discountPct}% off
-                </span>
-              </>
-            ) : (
-              <span className="text-2xl font-semibold text-primary">
-                {formatPrice(product.price)}
-              </span>
-            )}
-          </div>
-
           <p className="mt-4 leading-relaxed text-muted-foreground">
             {product.description}
           </p>
 
           <div className="mt-6 border-t border-border pt-6">
-            <FlashSalePurchaseForm product={product} />
+            <DesignerPurchaseForm product={product} />
           </div>
         </div>
       </div>
