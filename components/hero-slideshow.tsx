@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const slides = [
   "/images/extra/extra-1.jpg",
@@ -60,12 +61,12 @@ export function HeroSlideshow() {
         <p className="mt-4 text-base text-white/80 sm:text-lg">
           Handcrafted designer pieces at special prices
         </p>
-        <a
-          href="#products"
+        <Link
+          href="/flash-sale"
           className="mt-10 inline-block border border-white px-10 py-3.5 text-xs font-semibold uppercase tracking-[0.25em] text-white transition-all duration-200 hover:bg-white hover:text-black"
         >
           Shop Now
-        </a>
+        </Link>
       </div>
 
       {/* Dot indicators */}
