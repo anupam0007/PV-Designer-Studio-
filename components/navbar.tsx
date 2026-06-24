@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -23,12 +24,17 @@ const navLinks = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex shrink-0 items-center" aria-label="PV Designer Studio — Home">
+        <Link
+          href="/"
+          className="flex shrink-0 items-center"
+          aria-label="PV Designer Studio — Home"
+        >
           <Image
             src="/images/logo.png"
             alt="PV Designer Studio"
@@ -55,8 +61,8 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* Mobile menu */}
-        <Sheet>
+        {/* Mobile menu — controlled so it closes when a link is tapped */}
+        <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
               <Menu className="h-5 w-5" />
@@ -79,6 +85,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  onClick={() => setOpen(false)}
                   className={cn(
                     "rounded-md px-3 py-2.5 text-base font-medium transition-colors hover:bg-muted",
                     pathname === link.href ? "text-primary" : "text-foreground"

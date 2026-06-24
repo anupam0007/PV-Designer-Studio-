@@ -48,7 +48,25 @@ export async function getProductBySlugAsync(slug: string): Promise<Product | und
 
 export async function getRelatedProductsAsync(product: Product, limit = 4): Promise<Product[]> {
   const products = await getAllProducts();
-  return products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, limit);
+  const sameCategory = products.filter(
+    (p) => p.category === product.category && p.id !== product.id
+  );
+
+  if (sameCategory.length === 0) {
+    // last resort: anything from another category
+    return products.filter((p) => p.id !== product.id).slice(0, limit);
+  }
+
+  // Prioritise products that share at least one colour with the current product
+  const productColors = (product.colors ?? []).map((c) => c.toLowerCase());
+  const scored = sameCategory.map((p) => {
+    const overlap = (p.colors ?? []).filter((c) =>
+      productColors.includes(c.toLowerCase())
+    ).length;
+    return { p, overlap };
+  });
+  scored.sort((a, b) => b.overlap - a.overlap);
+  return scored.slice(0, limit).map((x) => x.p);
 }
 
 /** Products for a /shop/[category] route, including the special "offers" slug. */

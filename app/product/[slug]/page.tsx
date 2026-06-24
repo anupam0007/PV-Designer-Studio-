@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { ProductGallery } from "@/components/product-gallery";
@@ -7,6 +9,7 @@ import { formatPrice, calculateDiscountPercent } from "@/lib/format";
 import {
   getAllProducts,
   getProductBySlugAsync,
+  getRelatedProductsAsync,
 } from "@/lib/products-data";
 
 export async function generateStaticParams() {
@@ -35,7 +38,12 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = await getProductBySlugAsync(slug);
+  const [product, similar] = await Promise.all([
+    getProductBySlugAsync(slug),
+    getProductBySlugAsync(slug).then((p) =>
+      p ? getRelatedProductsAsync(p, 4) : []
+    ),
+  ]);
 
   if (!product) notFound();
 
@@ -46,6 +54,7 @@ export default async function ProductPage({
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      {/* Main product grid */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
         <ProductGallery images={product.images} name={product.name} />
 
@@ -98,6 +107,38 @@ export default async function ProductPage({
           </div>
         </div>
       </div>
+
+      {/* You May Also Like */}
+      {similar.length > 0 && (
+        <div className="mt-16 border-t border-border pt-10">
+          <h2 className="mb-6 font-heading text-xl font-semibold">You May Also Like</h2>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
+            {similar.map((p) => (
+              <Link
+                key={p.id}
+                href={`/product/${p.slug}`}
+                className="group block"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-[#F5F1EC]">
+                  <div className="absolute inset-1.5">
+                    <Image
+                      src={p.images[0]}
+                      alt={p.name}
+                      fill
+                      sizes="(max-width: 640px) 50vw, 25vw"
+                      className="object-contain transition-opacity duration-300 group-hover:opacity-80"
+                    />
+                  </div>
+                </div>
+                <p className="mt-2 truncate text-sm font-medium text-stone-800">{p.name}</p>
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {p.brand}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

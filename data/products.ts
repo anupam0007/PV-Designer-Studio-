@@ -53,7 +53,7 @@ export const products: Product[] = [
     price: 2999,
     sizes: SIZES,
     colors: ["Lavender"],
-    images: [`/images/products/lavender-lace-1.jpg`, "/images/extra/extra-9.jpg", "/images/extra/extra-10.jpg"],
+    images: [`/images/products/lavender-lace-1.jpg`],
     description:
       "A dreamy lavender lehenga finished with delicate lace detailing. Lightweight and flowy, it's perfect for sangeet nights and festive get-togethers.",
     isNew: true,
@@ -66,7 +66,7 @@ export const products: Product[] = [
     brand: "Nayakii",
     price: 2999,
     sizes: SIZES,
-    images: ["/images/products/alia-1.jpg", "/images/new-arrival-2.jpg", "/images/featured-lehenga-1.jpg"],
+    images: ["/images/products/alia-1.jpg"],
     description:
       "The Alia lehenga combines a fitted blouse with a graceful flared skirt for an effortlessly elegant silhouette. A versatile pick for receptions and parties.",
     isNew: true,
@@ -93,7 +93,7 @@ export const products: Product[] = [
     price: 2999,
     sizes: SIZES,
     colors: ["Pink"],
-    images: ["/images/new-arrival-3.jpg", "/images/extra/extra-4.jpg", "/images/extra/extra-5.jpg"],
+    images: ["/images/new-arrival-3.jpg"],
     description:
       "Inspired by blooming champa flowers, this pink lehenga features intricate golden detailing that catches the light beautifully on every twirl.",
   },
@@ -106,7 +106,7 @@ export const products: Product[] = [
     price: 2999,
     sizes: SIZES,
     colors: ["Purple"],
-    images: ["/images/products/swarna-champa-purple-1.jpg", "/images/extra/extra-1.jpg"],
+    images: ["/images/products/swarna-champa-purple-1.jpg"],
     description:
       "The purple edition of our Swarna Champa lehenga — regal, vibrant and finished with golden accents for a luxe festive look.",
   },
@@ -118,7 +118,7 @@ export const products: Product[] = [
     brand: "Nayakii",
     price: 1999,
     sizes: SIZES,
-    images: ["/images/products/aarohi-1.jpg", "/images/extra/extra-2.jpg"],
+    images: ["/images/products/aarohi-1.jpg"],
     description:
       "A budget-friendly festive lehenga that doesn't compromise on style — clean embroidery, comfortable fabric and an easy, flattering fit.",
   },
@@ -130,7 +130,7 @@ export const products: Product[] = [
     brand: "PV Bridals",
     price: 3499,
     sizes: SIZES,
-    images: ["/images/products/arrora-1.jpg", "/images/extra/extra-3.jpg"],
+    images: ["/images/products/arrora-1.jpg"],
     description:
       "Arrora brings together rich textures and a sweeping silhouette — ideal for bridesmaids and special-occasion dressing.",
   },
@@ -223,7 +223,7 @@ export const products: Product[] = [
     price: 4599,
     salePrice: 3499,
     sizes: SIZES,
-    images: ["/images/new-arrival-1.jpg", "/images/featured-gown-1.jpg", "/images/extra/extra-6.jpg"],
+    images: ["/images/new-arrival-1.jpg"],
     description:
       "Dahlia is a statement gown with layered detailing and a structured bodice, perfect for sangeet nights and pre-wedding shoots.",
     isOffer: true,
@@ -280,7 +280,7 @@ export const products: Product[] = [
     salePrice: 17999,
     sizes: SIZES,
     colors: ["Jade Green"],
-    images: ["/images/products/jade-blossom-1.jpg", "/images/products/jade-blossom-2.jpg", "/images/featured-blouse-1.jpg"],
+    images: ["/images/products/jade-blossom-1.jpg", "/images/products/jade-blossom-2.jpg"],
     description:
       "Jade Blossom is an exquisite hand-embroidered bridal blouse featuring fine aari and zardozi work — the perfect finishing piece for your bridal saree.",
     isBestseller: true,
@@ -351,7 +351,7 @@ export const products: Product[] = [
     salePrice: 3999,
     sizes: SIZES,
     colors: ["Ivory", "Maroon"],
-    images: ["/images/cat-indo-western.jpg", "/images/extra/extra-11.jpg", "/images/extra/extra-12.jpg"],
+    images: ["/images/cat-indo-western.jpg"],
     description:
       "A perfect blend of tradition and modernity, the Riya set pairs a fitted crop jacket with flared trousers — effortlessly chic for cocktail parties and receptions.",
     isNew: true,
