@@ -138,7 +138,8 @@
     @apply bg-background text-foreground;
   }
   html {
-    @apply font-sans scroll-smooth;
+    @apply font-sans;
+    scroll-behavior: auto;
   }
   h1,
   h2,

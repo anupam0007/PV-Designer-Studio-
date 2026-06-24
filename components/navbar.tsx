@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { Home, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,6 +13,7 @@ import {
   SheetTitle,
   SheetHeader,
 } from "@/components/ui/sheet";
+import { InstagramIcon } from "@/components/social-icons";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -21,9 +22,30 @@ const navLinks = [
   { label: "Size Chart", href: "/size-chart" },
 ];
 
+const INSTAGRAM_URL = "https://www.instagram.com/pvdesignerstudio/";
+
 export function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  // Android back button: push a dummy history entry when menu opens,
+  // so pressing back closes the menu instead of leaving the page.
+  useEffect(() => {
+    if (!open) return;
+
+    window.history.pushState({ menuOpen: true }, "");
+
+    function handlePopState() {
+      setOpen(false);
+    }
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, [open]);
+
+  function closeMenu() {
+    setOpen(false);
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
@@ -60,15 +82,16 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* Mobile menu — controlled so it closes when a link is tapped */}
+        {/* Mobile menu */}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open menu">
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-72">
-            <SheetHeader>
+
+          <SheetContent side="right" className="flex w-72 flex-col">
+            <SheetHeader className="shrink-0">
               <SheetTitle>
                 <Image
                   src="/images/logo.png"
@@ -79,20 +102,50 @@ export function Navbar() {
                 />
               </SheetTitle>
             </SheetHeader>
-            <div className="flex flex-col gap-1 px-4 pt-4">
+
+            {/* Nav links */}
+            <div className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-4 pt-2">
+              {/* Home */}
+              <Link
+                href="/"
+                onClick={closeMenu}
+                className={cn(
+                  "flex items-center gap-2.5 rounded-md px-3 py-3 text-base font-medium transition-colors hover:bg-muted",
+                  pathname === "/" ? "text-primary" : "text-foreground"
+                )}
+              >
+                <Home className="h-4 w-4 shrink-0" />
+                Home
+              </Link>
+
+              {/* Main pages */}
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setOpen(false)}
+                  onClick={closeMenu}
                   className={cn(
-                    "rounded-md px-3 py-2.5 text-base font-medium transition-colors hover:bg-muted",
+                    "rounded-md px-3 py-3 text-base font-medium transition-colors hover:bg-muted",
                     pathname === link.href ? "text-primary" : "text-foreground"
                   )}
                 >
                   {link.label}
                 </Link>
               ))}
+
+              {/* Instagram — pinned to bottom */}
+              <div className="mt-auto border-t border-border pt-4 pb-2">
+                <Link
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMenu}
+                  className="flex items-center gap-2.5 rounded-md px-3 py-3 text-base font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-primary"
+                >
+                  <InstagramIcon className="h-5 w-5 shrink-0" />
+                  Instagram
+                </Link>
+              </div>
             </div>
           </SheetContent>
         </Sheet>

@@ -1,5 +1,7 @@
-import Link from "next/link";
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const categories = [
   {
@@ -8,6 +10,7 @@ const categories = [
     href: "/new-arrivals",
     image: "/images/products/arrora-1.jpg",
     position: "object-top",
+    priority: true,
   },
   {
     label: "Designer",
@@ -15,6 +18,7 @@ const categories = [
     href: "/designer",
     image: "/images/products/luxe-velvet-1.jpg",
     position: "object-top",
+    priority: true,
   },
   {
     label: "Flash Sale",
@@ -22,6 +26,7 @@ const categories = [
     href: "/flash-sale",
     image: "/images/extra/extra-1.jpg",
     position: "object-top",
+    priority: false,
   },
   {
     label: "Size Chart",
@@ -29,10 +34,19 @@ const categories = [
     href: "/size-chart",
     image: "/images/products/kanmani-1.jpg",
     position: "object-top",
+    priority: false,
   },
 ];
 
 export function ShopCategories() {
+  const router = useRouter();
+
+  function goTo(href: string) {
+    // Scroll to top instantly, then navigate
+    window.scrollTo({ top: 0, behavior: "instant" });
+    router.push(href);
+  }
+
   return (
     <section className="bg-[#FBF6EE] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
@@ -41,9 +55,10 @@ export function ShopCategories() {
         </p>
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           {categories.map((cat) => (
-            <Link
+            <button
               key={cat.label}
-              href={cat.href}
+              type="button"
+              onClick={() => goTo(cat.href)}
               className="group relative aspect-[3/4] overflow-hidden rounded-sm"
             >
               {/* Product image */}
@@ -51,11 +66,12 @@ export function ShopCategories() {
                 src={cat.image}
                 alt={cat.label}
                 fill
+                priority={cat.priority}
                 sizes="(max-width: 640px) 50vw, 25vw"
                 className={`object-cover ${cat.position} transition-transform duration-500 group-hover:scale-105`}
               />
 
-              {/* Maroon gradient overlay — bottom heavy so image is clear at top */}
+              {/* Maroon gradient overlay */}
               <div
                 className="absolute inset-0"
                 style={{
@@ -65,7 +81,7 @@ export function ShopCategories() {
               />
 
               {/* Label */}
-              <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4">
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-left sm:p-4">
                 <p className="font-heading text-sm font-bold uppercase tracking-wider text-white sm:text-base">
                   {cat.label}
                 </p>
@@ -73,7 +89,7 @@ export function ShopCategories() {
                   {cat.sublabel}
                 </p>
               </div>
-            </Link>
+            </button>
           ))}
         </div>
       </div>
