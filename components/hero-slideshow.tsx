@@ -4,14 +4,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-// 5 hero slides — replace these paths with your own images:
-// copy your 5 JPGs to public/images/hero/ as hero-1.jpg … hero-5.jpg
 const slides = [
-  "/images/products/kanmani-1.jpg",
-  "/images/products/wisteria-1.jpg",
-  "/images/products/hibiscus-charm-1.jpg",
-  "/images/products/green-orchid-1.jpg",
-  "/images/products/meera-gown-1.jpg",
+  "/images/hero/hero-1.png",
+  "/images/hero/hero-2.png",
+  "/images/hero/hero-3.png",
+  "/images/hero/hero-4.png",
+  "/images/hero/hero-5.png",
 ];
 
 export function HeroSlideshow() {
