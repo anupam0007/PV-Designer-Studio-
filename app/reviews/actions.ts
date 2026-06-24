@@ -21,8 +21,8 @@ export async function submitReview(
   const rating = Math.min(5, Math.max(1, Number(formData.get("rating") ?? 5)));
   const photo = formData.get("image");
 
-  if (!name || !review) {
-    return { error: "Please enter your name and a review." };
+  if (!name) {
+    return { error: "Please enter your name." };
   }
 
   const admin = createAdminClient();
