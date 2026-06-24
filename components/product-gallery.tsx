@@ -16,7 +16,7 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
           fill
           priority
           sizes="(max-width: 640px) 100vw, 50vw"
-          className="object-cover"
+          className="object-cover object-top"
         />
       </div>
       {images.length > 1 && (
