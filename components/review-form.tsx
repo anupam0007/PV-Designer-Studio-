@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { submitReview } from "@/app/reviews/actions";
+import { cn } from "@/lib/utils";
 
 function StarRatingPicker({
   value,
@@ -17,9 +18,10 @@ function StarRatingPicker({
   onChange: (v: number) => void;
 }) {
   const [hovered, setHovered] = useState(0);
+  const labels = ["", "Poor", "Fair", "Good", "Very Good", "Excellent"];
 
   return (
-    <div className="flex gap-1.5">
+    <div className="flex items-center gap-1.5">
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
@@ -38,24 +40,21 @@ function StarRatingPicker({
           />
         </button>
       ))}
-      <span className="ml-2 self-center text-sm text-muted-foreground">
-        {["", "Poor", "Fair", "Good", "Very Good", "Excellent"][hovered || value]}
+      <span className="ml-1 self-center text-sm opacity-70">
+        {labels[hovered || value]}
       </span>
     </div>
   );
 }
 
-export function ReviewForm() {
+export function ReviewForm({ dark = false }: { dark?: boolean }) {
   const [state, formAction, pending] = useActionState(submitReview, {});
   const formRef = useRef<HTMLFormElement>(null);
   const submittedRef = useRef(false);
   const [rating, setRating] = useState(5);
 
   useEffect(() => {
-    if (pending) {
-      submittedRef.current = true;
-      return;
-    }
+    if (pending) { submittedRef.current = true; return; }
     if (submittedRef.current) {
       submittedRef.current = false;
       if (!state.error) {
@@ -66,55 +65,72 @@ export function ReviewForm() {
     }
   }, [pending, state]);
 
+  const labelClass = cn("text-sm font-medium", dark ? "text-[#F5E6C8]" : "");
+  const mutedClass = cn("font-normal text-sm", dark ? "text-[rgba(245,230,200,0.55)]" : "text-muted-foreground");
+
   return (
     <form
       ref={formRef}
       action={formAction}
       encType="multipart/form-data"
-      className="grid grid-cols-1 gap-5 rounded-lg border bg-card p-6"
+      className="grid grid-cols-1 gap-5"
     >
-      {/* ── 1. Star rating — first and most prominent ── */}
+      {/* 1 — Star rating (first) */}
       <div className="flex flex-col gap-2">
-        <Label className="text-sm font-semibold">Your Rating</Label>
+        <span className={labelClass}>Your Rating</span>
         <StarRatingPicker value={rating} onChange={setRating} />
         <input type="hidden" name="rating" value={rating} />
       </div>
 
-      {/* ── 2. Name ── */}
+      {/* 2 — Name */}
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="name">Your Name</Label>
-        <Input id="name" name="name" required placeholder="Your name" />
+        <Label htmlFor="name" className={labelClass}>Your Name</Label>
+        <Input
+          id="name"
+          name="name"
+          required
+          placeholder="Your name"
+          className={dark ? "bg-white text-stone-900 border-transparent placeholder:text-stone-400" : ""}
+        />
       </div>
 
-      {/* ── 3. Review — optional ── */}
+      {/* 3 — Review (optional) */}
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="review">
-          Your Review{" "}
-          <span className="font-normal text-muted-foreground">(optional)</span>
+        <Label htmlFor="review" className={labelClass}>
+          Your Review <span className={mutedClass}>(optional)</span>
         </Label>
         <Textarea
           id="review"
           name="review"
           rows={4}
           placeholder="Tell us about your experience..."
+          className={dark ? "bg-white text-stone-900 border-transparent placeholder:text-stone-400" : ""}
         />
       </div>
 
-      {/* ── 4. Photo — optional ── */}
+      {/* 4 — Photo (optional) */}
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="image">
-          Add a Photo{" "}
-          <span className="font-normal text-muted-foreground">(optional)</span>
+        <Label htmlFor="image" className={labelClass}>
+          Add a Photo <span className={mutedClass}>(optional)</span>
         </Label>
-        <Input id="image" name="image" type="file" accept="image/*" />
+        <Input
+          id="image"
+          name="image"
+          type="file"
+          accept="image/*"
+          className={dark ? "bg-white text-stone-900 border-transparent file:text-stone-600" : ""}
+        />
       </div>
 
-      {state.error && (
-        <p className="text-sm text-destructive">{state.error}</p>
-      )}
+      {state.error && <p className="text-sm text-rose-300">{state.error}</p>}
 
       <div>
-        <Button type="submit" disabled={pending} size="lg">
+        <Button
+          type="submit"
+          disabled={pending}
+          size="lg"
+          className={dark ? "bg-[#F5E6C8] text-[#3D1018] hover:bg-[#e8d5a8] font-semibold" : ""}
+        >
           {pending ? "Submitting..." : "Submit Review"}
         </Button>
       </div>

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { ReviewSection } from "@/components/review-section";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { Toaster } from "@/components/ui/sonner";
 import { getContactSettings } from "@/lib/site-settings-data";
@@ -49,6 +51,10 @@ export default async function RootLayout({
 }>) {
   const contact = await getContactSettings();
 
+  const hdrs = await headers();
+  const pathname = hdrs.get("x-pathname") ?? "";
+  const showReviews = !pathname.startsWith("/admin");
+
   return (
     <html
       lang="en"
@@ -58,6 +64,7 @@ export default async function RootLayout({
         <Providers whatsappNumber={contact.whatsappNumber}>
           <Navbar />
           <main className="flex-1">{children}</main>
+          {showReviews && <ReviewSection />}
           <Footer />
           <WhatsAppButton />
           <Toaster position="bottom-right" />
