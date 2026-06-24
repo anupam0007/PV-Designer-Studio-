@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, MessageCircle, MapPin, Phone } from "lucide-react";
-import { FacebookIcon, InstagramIcon } from "@/components/social-icons";
+import { FacebookIcon, InstagramIcon, YoutubeIcon } from "@/components/social-icons";
 import { getContactSettings } from "@/lib/site-settings-data";
 import { locations } from "@/data/locations";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
@@ -37,6 +37,9 @@ export async function Footer() {
               </SocialIcon>
               <SocialIcon href={contact.facebook} label="Facebook">
                 <FacebookIcon className="h-4 w-4" />
+              </SocialIcon>
+              <SocialIcon href={contact.youtube} label="YouTube">
+                <YoutubeIcon className="h-4 w-4" />
               </SocialIcon>
             </div>
           </div>

@@ -16,7 +16,7 @@ export const contact = {
 export const socials = {
   instagram: "https://www.instagram.com/pvdesignerstudio/",
   facebook: "https://www.facebook.com/profile.php?id=61555700580856",
-  youtube: "https://www.youtube.com/@pvdesignerstudio6404",
+  youtube: "https://www.youtube.com/channel/UC6D4WQVCtCIJfNXWDNg-kzg",
 };
 
 export interface StudioLocation {

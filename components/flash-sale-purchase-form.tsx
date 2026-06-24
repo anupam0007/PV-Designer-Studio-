@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Minus, Plus } from "lucide-react";
 import type { Product } from "@/data/products";
 import { Button } from "@/components/ui/button";
 import { buildFlashSaleWhatsAppLink } from "@/lib/whatsapp";
@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 
 export function FlashSalePurchaseForm({ product }: { product: Product }) {
   const [size, setSize] = useState<string>(product.sizes[0] ?? "M");
+  const [qty, setQty] = useState(1);
   const whatsappNumber = useWhatsAppNumber();
 
   const price = product.salePrice ?? product.price;
@@ -20,6 +21,7 @@ export function FlashSalePurchaseForm({ product }: { product: Product }) {
     const link = buildFlashSaleWhatsAppLink(
       product.name,
       size,
+      qty,
       formatPrice(price),
       imageUrl,
       whatsappNumber
@@ -49,6 +51,32 @@ export function FlashSalePurchaseForm({ product }: { product: Product }) {
               {s}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Quantity selector */}
+      <div>
+        <p className="mb-2 text-sm font-medium">Quantity</p>
+        <div className="flex items-center gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={() => setQty((q) => Math.max(1, q - 1))}
+            aria-label="Decrease quantity"
+          >
+            <Minus className="h-4 w-4" />
+          </Button>
+          <span className="w-8 text-center text-base font-semibold">{qty}</span>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={() => setQty((q) => q + 1)}
+            aria-label="Increase quantity"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
         </div>
       </div>
 

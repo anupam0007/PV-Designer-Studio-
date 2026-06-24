@@ -10,7 +10,7 @@ export async function getAllTestimonials(): Promise<Testimonial[]> {
   const { data, error } = await supabase
     .from("testimonials")
     .select("*")
-    .order("sort_order", { ascending: true });
+    .order("id", { ascending: false }); // newest submissions first
 
   if (error || !data || data.length === 0) return staticTestimonials;
   return data.map((row) => ({
